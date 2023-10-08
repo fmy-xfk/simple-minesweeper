@@ -31,11 +31,11 @@ void uart_callback3(LPUART_Type *base, lpuart_handle_t *handle, status_t status,
 
 lpuart_transfer_callback_t callbacks[4]={uart_callback0,uart_callback1,uart_callback2,uart_callback3};
 
-/* 初始化串口
- * num: 串口编号
- * tx: TX引脚
- * rx: RX引脚
- * eh: 当使用事件驱动时，为收到字符的处理函数指针；不使用事件驱动时，填入NULL
+/* Serial port initialization
+ * num: Number of the serial port
+ * tx: TX pin
+ * rx: RX pin
+ * eh: NULL to disable event-driven mode; pointer of the event handler to enable event-driven mode
  */
 serial* serial_init(UARTN_enum num,UARTPIN_enum tx,UARTPIN_enum rx,char_recv_event_handler eh){
     serial *ser=serials+serial_cnt;

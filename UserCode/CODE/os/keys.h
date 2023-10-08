@@ -1,10 +1,3 @@
-/*
- * keys.h
- *
- *  Created on: 2022Äê3ÔÂ3ÈÕ
- *      Author: xff20
- */
-
 #ifndef KEYS_H_
 #define KEYS_H_
 

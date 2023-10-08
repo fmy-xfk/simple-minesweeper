@@ -1,10 +1,3 @@
-/*
- * pid.h
- *
- *  Created on: 2022320
- *      Author: xff20
- */
-
 #ifndef PID_H_
 #define PID_H_
 

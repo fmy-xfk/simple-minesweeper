@@ -1,10 +1,3 @@
-/*
- * timer.c 定时器管理库
- *
- *  Created on: 2022年5月13日
- *      Author: xff20
- */
-
 #include "timer.h"
 
 char __TimerName[10][20];

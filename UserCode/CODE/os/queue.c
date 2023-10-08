@@ -1,10 +1,3 @@
-/*
- * queue.c 数据结构：队列
- *
- *  Created on: Jul 18, 2022
- *      Author: xff20
- */
-
 #include "queue.h"
 
 /*

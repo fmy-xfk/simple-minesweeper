@@ -1,10 +1,3 @@
-/*
- * mconio.h
- *
- *  Created on: 2022Äê3ÔÂ3ÈÕ
- *      Author: xff20
- */
-
 #ifndef MLIB__MCONIO_H_
 #define MLIB__MCONIO_H_
 

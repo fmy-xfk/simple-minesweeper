@@ -1,10 +1,3 @@
-/*
- * timer.h
- *
- *  Created on: 2022Äê5ÔÂ13ÈÕ
- *      Author: xff20
- */
-
 #ifndef TIMER_H_
 #define TIMER_H_
 

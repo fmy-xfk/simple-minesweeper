@@ -1,10 +1,3 @@
-/*
- * util.h
- *
- *  Created on: Aug 1, 2022
- *      Author: xff20
- */
-
 #ifndef MLIB_UTIL_H_
 #define MLIB_UTIL_H_
 

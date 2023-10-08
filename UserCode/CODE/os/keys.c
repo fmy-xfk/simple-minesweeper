@@ -1,9 +1,3 @@
-/*
- * keys.c
- *
- *  Created on: 2022Äê3ÔÂ3ÈÕ
- *      Author: xff20
- */
 #include "keys.h"
 
 void init_keys() {

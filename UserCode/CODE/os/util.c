@@ -1,10 +1,3 @@
-/*
- * util.c ÆäËûº¯Êı
- *
- *  Created on: Aug 1, 2022
- *      Author: xff20
- */
-
 #include "util.h"
 
 float fsgn(float x){

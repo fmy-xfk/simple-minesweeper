@@ -8,26 +8,26 @@
 #define min(a,b) (((a)>(b))?(b):(a))
 #define max(a,b) (((a)>(b))?(a):(b))
 
-//ĞèÒªÓÃ»§ĞŞ¸ÄµÄ²¿·Ö£º¿ªÊ¼
-//ÆÁÄ»²¿·Ö
+//éœ€è¦ç”¨æˆ·ä¿®æ”¹çš„éƒ¨åˆ†ï¼šå¼€å§‹
+//å±å¹•éƒ¨åˆ†
 #define MCONIO_SCREEN_WIDTH 240
 #define MCONIO_SCREEN_HEIGHT 135 //320//135
 #define MCONIO_CHAR_WIDTH 8
 #define MCONIO_CHAR_HEIGHT 19//20//19
 
-//Êä³öº¯Êı
+//è¾“å‡ºå‡½æ•°
 #define screen_show_char ips114_showchar
 #define screen_clear ips114_clear
 #define screen_init ips114_init
 
-//¶ÓÁĞ²¿·Ö
+//é˜Ÿåˆ—éƒ¨åˆ†
 #define MAX_QUEUE_SIZE 129
 
-//°´Å¥Òı½Å
+//æŒ‰é’®å¼•è„š
 #define KEYS_COUNT  4
 extern uint32 ALL_KEYS[KEYS_COUNT];
 
-//ÔÚÕâÀïÉèÖÃ°´¼üÒı½Å£¬²¢¼ÓÈësyshead.cÖĞµÄALL_KEYSÊı×é
+//åœ¨è¿™é‡Œè®¾ç½®æŒ‰é”®å¼•è„šï¼Œå¹¶åŠ å…¥syshead.cä¸­çš„ALL_KEYSæ•°ç»„
 #define K_UP        C31
 #define K_DOWN      C27
 #define K_LEFT      
@@ -45,7 +45,7 @@ extern uint32 ALL_KEYS[KEYS_COUNT];
 #define K_UNDO      
 #define K_REDO      
 
-//ĞèÒªÓÃ»§ĞŞ¸ÄµÄ²¿·Ö£º½áÊø
+//éœ€è¦ç”¨æˆ·ä¿®æ”¹çš„éƒ¨åˆ†ï¼šç»“æŸ
 
 void init_key(uint32 pin);
 bool is_key_pressed(uint32 pin);

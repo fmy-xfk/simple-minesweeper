@@ -3,7 +3,7 @@
 #include "apps/__applist.h"
 
 /********************
-*  延时部分
+*  Delay functions
 *********************/
 void mdelay_ms(uint32 ms){
     systick_delay_ms(ms);
@@ -14,44 +14,44 @@ void mdelay_us(uint32 us){
 }
 
 /********************
-*  按键部分
+*  Keys
 *********************/
 uint32 ALL_KEYS[KEYS_COUNT]={C31,C27,C26,C4};
 
-//指定按键初始化方式
+//Indicate how to initialize the key
 void init_key(uint32 pin){
     gpio_init(pin, GPI, GPIO_HIGH, GPIO_PIN_CONFIG);
 }
 
-//指定按键引脚是否按下的判断方式
+//Indicate how to determine a key is pressed
 bool is_key_pressed(uint32 pin){
     return !gpio_get(pin);
 }
 
 /********************
-*  系统部分
+*  System
 *********************/
-//指定系统基本参数
+//Basic parameters of the system
 system_data SYSMAIN={
-    //指定系统应用
+    //Built-in applications
     {
-        {"Normal Run",move_test},
-        {"Quick Run",move_test2},
-        {"USound Test",usound_test},
-        {"ICM Test",icm_test},
-        {"PWM Checker",pwm_checker},
-        {"Speed Test",spd_mea},
-        {"Sector Editor",sector_editor},
+        {"Normal Run",move_test},       //Main program
+        {"Quick Run",move_test2},       //Main program
+        {"USound Test",usound_test},    //Checker
+        {"ICM Test",icm_test},          //Checker
+        {"PWM Checker",pwm_checker},    //Checker
+        {"Speed Test",spd_mea},         //Obsolete!
+        {"Sector Editor",sector_editor},//Obsolete!
     },
-    //指定系统应用数量
+    //Number of applications
     7,
-    //此项无需用户指定
+    //Reserved value. You should not change it!
     {0},
-    //指定系统配置使用的扇区编号
+    //Index of sector where system settings are stored
     1023
 };
 
-//指定系统启动前需要初始化的内容
+//Initialization before the system boots
 void os_preinit(){
     //Motor
     const float kp=50.0f,ki=5.0f,kd=0.0f;
@@ -68,7 +68,7 @@ void os_preinit(){
     usound_init_all(C9,C8,C13,C12,C15,C14,C11,C10);
 }
 
-//指定系统启动后再初始化的内容
+//Initialization after the system boots
 void os_postinit(){
     icm_init();
     icm_auto_calib();

@@ -1,8 +1,9 @@
 #include "motor.h"
 
-//速度的数值等于轮子旋转100ms的编码器值!!!
+//ATTN: Speed is defined as the value of encoder when the wheel rotates for 100ms!
 motor motors[4];
 
+//Initialize the motor
 void motor_init(motor *mtr, PWMCH_enum pwmch, PIN_enum dirpin,
     QTIMERN_enum qch,QTIMER_PIN_enum qpin1,QTIMER_PIN_enum qpin2,bool flip,
     float kp,float ki,float kd){
@@ -19,7 +20,7 @@ void motor_init(motor *mtr, PWMCH_enum pwmch, PIN_enum dirpin,
     qtimer_quad_init(qch,qpin1,qpin2);
 }
 
-//获得编码器值
+//Get the value of the encoder(i.e. deformed speed) of the given motor
 int32 motor_get_encoder(motor *mtr){
     mtr->ecdval=(int32)qtimer_quad_get(mtr->ecd,mtr->ecdp1);
     qtimer_quad_clear(mtr->ecd,mtr->ecdp1);
@@ -27,7 +28,7 @@ int32 motor_get_encoder(motor *mtr){
     return mtr->ecdval;
 }
 
-//设置电机占空比
+//Set the PWM duty of given motor
 void motor_set_pwm(motor *mtr,int32 _duty){
     //assert(_duty<=DUTY_MAX && _duty>=-DUTY_MAX);
     if(_duty>DUTY_MAX) _duty=DUTY_MAX;
@@ -37,7 +38,7 @@ void motor_set_pwm(motor *mtr,int32 _duty){
     pwm_duty(mtr->pwm,abs(_duty));
 }
 
-//设置速度
+//Set the speed of given motor
 void motor_set_spd(motor *mtr,int32 spd){
     PIDSet(&mtr->pid,spd*PID_PERIOD_MS/100);
 }

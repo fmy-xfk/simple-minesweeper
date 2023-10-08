@@ -2,7 +2,7 @@
 
 mecanum_info mecanum;
 
-//停车
+//Stop moving
 void mecanum_stop(){
     int i;
     RUNNING=false;
@@ -25,9 +25,11 @@ void mecanum_set_wheels_spd(int32 lf,int32 rf,int32 lb,int32 rb){
     motor_set_spd(MTR_RB,rb);
 }
 
-//定时中断内调用该函数
+//Call this function in the interrupt of timer!
 void mecanum_callback(){
-    //超声波数据应当在主函数内更新
+    //Since ultrasound function blocks, their data should be updated in the main function, not here.
+
+    //Get data of gyroscope to determine the yaw of the car
     icm_get(ICM_BUF);
     if(abs(ICM_BUF->wz)>5) CAR_DIR+=ICM_BUF->wz;
     int32 rot_mod=0;
@@ -39,7 +41,7 @@ void mecanum_callback(){
         if(rot_mod<-ROT_LIM) rot_mod=-ROT_LIM;
     }
 
-    //编码器
+    //Calc the motor callback to update the value of encoder and use PID algorithm to maintain the speed of every wheel
     if(FORCE_RUN) RUNNING=true;
     if(RUNNING) {
         motor_callback(MTR_LF);
@@ -49,9 +51,13 @@ void mecanum_callback(){
     }else{
         mecanum_stop();
     }
+
+    //Determine the position of the car
     int32 dx=MTR_LB->ecdval-MTR_RB->ecdval+MTR_RF->ecdval-MTR_LF->ecdval;
     int32 dy=MTR_LB->ecdval+MTR_LF->ecdval+MTR_RB->ecdval+MTR_RF->ecdval;
     CUR_MILE_POS.x+=dx;CUR_MILE_POS.y+=dy;
+
+    //Continue to move the given position
     if(RUNNING){
         if(CAR_MODE==MODE_MILEAGE){
             dx=DST_MILE_POS.x-CUR_MILE_POS.x;dy=DST_MILE_POS.y-CUR_MILE_POS.y;
@@ -60,6 +66,7 @@ void mecanum_callback(){
                 mecanum_stop();
             }else{
                 int32 wx=CAR_SPD*dx/r1,wy=CAR_SPD*dy/r1,w1=wy-wx,w2=wy+wx;
+                //Prevent the car from rotating by add bias determined by current yaw
                 mecanum_set_wheels_spd(w1-rot_mod*5,w2+rot_mod*5,w2-rot_mod*5,w1+rot_mod*5);
             }
         }else{
@@ -74,12 +81,14 @@ void mecanum_callback(){
             }
             double r1=sqrt((double)dx*dx+(double)dy*dy);
             if(r1<=USD_POS_ERR*max((CAR_SPD-400)/100-3,1) && !FORCE_RUN){
+                //Stop moving when the car is near enough to the given position, considering the inertia of the car
                 mecanum_stop();
             }else{
                 int32 mspd=CAR_SPD;
                 if(r1<APPROACH_THRESHOLD_MM) mspd=mspd*r1/APPROACH_THRESHOLD_MM;
                 if(mspd<MIN_SPD) mspd=MIN_SPD;
                 int32 wx=mspd*dx/r1,wy=mspd*dy/r1,w1=wy-wx,w2=wy+wx;
+                //Prevent the car from rotating by add bias determined by current yaw
                 mecanum_set_wheels_spd(w1-rot_mod*5,w2+rot_mod*5,w2-rot_mod*5,w1+rot_mod*5);
             }
         }
@@ -87,15 +96,16 @@ void mecanum_callback(){
     if(FORCE_RUN>0) --FORCE_RUN;
 }
 
-/* 移动到指定位置
- * mode: 位置测量方式
- * spd:  速度
- * (val1,val2): 
- *      mode==MILEAGE时，分别表示x,y坐标（x坐标向左为正，y坐标向前为正）
- *      mode==USOUND_FR，分别表示与前面和右边的超声波距离
- *      mode==USOUND_RB，分别表示与右边和后面的超声波距离
- *      mode==USOUND_BL，分别表示与后面和左边的超声波距离
- *      mode==USOUND_LF，分别表示与左边和前面的超声波距离
+/* Move to the given position
+ * mode: distance metrics, selecting from {MILEAGE,USOUND_FR,USOUND_RB,USOUND_BL,USOUND_LF}
+ * spd:  speed
+ * (val1,val2): the given position
+ *      When mode==MILEAGE, represents the coordinate (x,y) measured by encoder of motor.
+ *          This mode is deprecated since it is not accurate. (x: left is positive; y: front is positive)
+ *      When mode==USOUND_FR, represents the distance to the FRONT and to the RIGHT respectively
+ *      When mode==USOUND_RB, represents the distance to the RIGHT and to the BACK respectively
+ *      When mode==USOUND_BL, represents the distance to the BACK and to the LEFT respectively
+ *      When mode==USOUND_LF, represents the distance to the LEFT and to the FRONT respectively
  */
 void mecanum_move_to(car_mode_enum mode,int32 spd,int32 val1,int32 val2){
     CAR_MODE=mode;
@@ -115,23 +125,26 @@ void mecanum_move_to(car_mode_enum mode,int32 spd,int32 val1,int32 val2){
     }
 }
 
-//清空状态并停车
+//Clear the status and stop moving.
 void mecanum_clear(){
     int i;
     memset(&mecanum,0,sizeof(mecanum));
     for(i=0;i<4;i++){motor_get_encoder(motors+i);motors[i].ecdval=0;}
 }
 
+//Get current speed of the car measured by motor encoders.
 int32 mecanum_get_spd(){
     int32 w1=(MTR_LF->ecdval+MTR_RB->ecdval),w2=(MTR_RF->ecdval+MTR_LB->ecdval);
     int32 wx=w2-w1,wy=w2+w1;
     return sqrt(wx*wx+wy*wy);
 }
 
+//Get current position measured by motor encoders.
 point mecanum_get_pos(){
     return CUR_MILE_POS;
 }
 
+//Get whether the car is running
 bool mecanum_is_running(){
     return RUNNING;
 }

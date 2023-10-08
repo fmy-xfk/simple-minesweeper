@@ -1,9 +1,4 @@
-/*
- * buzzer.c
- *
- *  Created on: 2022Äê5ÔÂ13ÈÕ
- *      Author: xff20
- */
+//Buzzer driver
 
 #include <headfile.h>
 

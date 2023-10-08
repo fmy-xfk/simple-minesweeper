@@ -1,9 +1,4 @@
-/*
- * icm.c
- *
- *  Created on: Jul 26, 2022
- *      Author: xff20
- */
+//Gyroscope driver
 
 #include "icm.h"
 

@@ -1,10 +1,3 @@
-/*
- * pid.c PID
- *
- *  Created on: 2022Äê3ÔÂ20ÈÕ
- *      Author: xff20
- */
-
 #include "pid.h"
 
 PID LPID,RPID;

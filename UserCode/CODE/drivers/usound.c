@@ -43,13 +43,14 @@ bool usound_send(USound *usd){
     return true;
 }
 
-//声速公式v=331+0.61t，t为摄氏温度
+//Formula of sound speed v=331+0.61t，t=degree Celsis
 int32 usound_get(USound *usd){
     return max((int32)(0.25736*(double)usd->fl_time-36.4414),0);
 }
 
 USound __usd[4];
 
+//Initialize the ultrasound distance meter by given pins
 void usound_init_all(PIN_enum trig1,PIN_enum echo1,
     PIN_enum trig2,PIN_enum echo2,
     PIN_enum trig3,PIN_enum echo3,
@@ -60,7 +61,8 @@ void usound_init_all(PIN_enum trig1,PIN_enum echo1,
     usound_init(__usd+3,trig4,echo4);
 }
 
-//请注意，该函数是阻塞的，运行约需200ms
+//Measure the distance in all the directions.
+//Note that this function will be blocking. It needs about 200ms to execute this function.
 void usound_get_dist_all(int32 *dist){
     int32 i;
     for(i=0;i<4;i++){
@@ -70,7 +72,8 @@ void usound_get_dist_all(int32 *dist){
     }
 }
 
-//mode 2^0:Front  2^1:Right  2^2:Back  2^3:Left
+//Measure the distance in given directions.
+//mode indicates the given directions: 2^0:Front  2^1:Right  2^2:Back  2^3:Left
 void usound_get_dist_certain(int32 *dist,int32 mode){
     int32 i;
     for(i=0;i<4;i++){
